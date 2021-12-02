@@ -23,4 +23,20 @@ describe('a NewThread entities', () => {
       'NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
+
+  it('should create newThread entities correctly', () => {
+    // Arrange
+    const payload = {
+      title: 'some title',
+      body: 'some thread body',
+    };
+
+    // Action
+    const newThread = new NewThread(payload);
+
+    // Assert
+    expect(newThread).toBeInstanceOf(NewThread);
+    expect(newThread.title).toEqual(payload.title);
+    expect(newThread.body).toEqual(payload.body);
+  });
 });

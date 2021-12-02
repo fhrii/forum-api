@@ -1,6 +1,6 @@
-import NotFoundError from '../../../Commons/exceptions/NotFoundError';
 import CommentRepository from '../../../Domains/comments/CommentRepository';
 import AddedReply from '../../../Domains/replies/entities/AddedReply';
+import NewReply from '../../../Domains/replies/entities/NewReply';
 import ReplyRepository from '../../../Domains/replies/ReplyRepository';
 import ThreadRepository from '../../../Domains/threads/ThreadRepository';
 import AddReplyUseCase from '../AddReplyUseCase';
@@ -45,7 +45,7 @@ describe('AddReplyUseCase', () => {
       commentId: 'comment-123',
       owner: 'user-123',
     };
-    const expectingAddedReply = new AddedReply({
+    const expectedAddedReply = new AddedReply({
       id: 'reply-123',
       content: useCasePayload.content,
       owner: useCasePayload.owner,
@@ -60,26 +60,31 @@ describe('AddReplyUseCase', () => {
     });
 
     // Mocking
-    mockThreadRepository.checkThreadExistance = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockCommentRepository.checkCommentExistance = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockReplyRepository.addReply = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(expectingAddedReply));
+    mockThreadRepository.checkThreadExistance = jest.fn(() =>
+      Promise.resolve()
+    );
+    mockCommentRepository.checkCommentExistance = jest.fn(() =>
+      Promise.resolve()
+    );
+    mockReplyRepository.addReply = jest.fn(() =>
+      Promise.resolve(expectedAddedReply)
+    );
 
     // Action
     const addedReply = await addReplyUseCase.execute(useCasePayload);
 
     // Assert
-    expect(addedReply).toStrictEqual(expectingAddedReply);
+    expect(addedReply).toStrictEqual(expectedAddedReply);
     expect(mockThreadRepository.checkThreadExistance).toBeCalledWith(
       useCasePayload.threadId
     );
     expect(mockCommentRepository.checkCommentExistance).toBeCalledWith(
       useCasePayload.commentId
+    );
+    expect(mockReplyRepository.addReply).toBeCalledWith(
+      new NewReply({ content: useCasePayload.content }),
+      useCasePayload.commentId,
+      useCasePayload.owner
     );
   });
 });

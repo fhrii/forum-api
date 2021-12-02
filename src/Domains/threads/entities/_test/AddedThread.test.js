@@ -27,4 +27,22 @@ describe('a AddedThread entities', () => {
       'ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
+
+  it('should create addedThread entities correctly', () => {
+    // Arrange
+    const payload = {
+      id: 'thread-123',
+      title: 'some title',
+      owner: 'user-123',
+    };
+
+    // Action
+    const addedThread = new AddedThread(payload);
+
+    // Assert
+    expect(addedThread).toBeInstanceOf(AddedThread);
+    expect(addedThread.id).toEqual(payload.id);
+    expect(addedThread.title).toEqual(payload.title);
+    expect(addedThread.owner).toEqual(payload.owner);
+  });
 });

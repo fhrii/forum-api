@@ -17,7 +17,21 @@ describe('a NewComment entities', () => {
 
     // Action & Arrange
     expect(() => new NewComment(payload)).toThrowError(
-      'NEW_COMMENT'.NOT_MEET_DATA_TYPE_SPECIFICATION
+      'NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
+  });
+
+  it('should create newComment entities correctly', () => {
+    // Arrange
+    const payload = {
+      content: 'some comment content',
+    };
+
+    // Action
+    const newComment = new NewComment(payload);
+
+    // Assert
+    expect(newComment).toBeInstanceOf(NewComment);
+    expect(newComment.content).toEqual(payload.content);
   });
 });

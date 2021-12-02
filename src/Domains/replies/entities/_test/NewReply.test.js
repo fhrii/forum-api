@@ -22,4 +22,18 @@ describe('a NewReply entities', () => {
       'NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
+
+  it('should create newReply entities correctly', () => {
+    // Arrange
+    const payload = {
+      content: 'some reply content',
+    };
+
+    // Action
+    const newReply = new NewReply(payload);
+
+    // Assert
+    expect(newReply).toBeInstanceOf(NewReply);
+    expect(newReply.content).toEqual(payload.content);
+  });
 });

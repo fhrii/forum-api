@@ -27,4 +27,22 @@ describe('an Addedcomment entities', () => {
       'ADDED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
+
+  it('should create addedComment entities correctly', () => {
+    // Arrange
+    const payload = {
+      id: 'comment-123',
+      content: 'some comment content',
+      owner: 'user-123',
+    };
+
+    // Action
+    const addedComment = new AddedComment(payload);
+
+    // Assert
+    expect(addedComment).toBeInstanceOf(AddedComment);
+    expect(addedComment.id).toEqual(payload.id);
+    expect(addedComment.content).toEqual(payload.content);
+    expect(addedComment.owner).toEqual(payload.owner);
+  });
 });

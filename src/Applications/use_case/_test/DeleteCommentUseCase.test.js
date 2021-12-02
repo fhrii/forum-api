@@ -8,11 +8,11 @@ describe('DeleteCommentUseCase', () => {
       id: 'comment-123',
       threadId: 'thread-123',
     };
-    const getCommentUseCase = new DeleteCommentUseCase({});
+    const deleteCommentUseCase = new DeleteCommentUseCase({});
 
     // Action & Assert
     await expect(
-      getCommentUseCase.execute(useCasePayload)
+      deleteCommentUseCase.execute(useCasePayload)
     ).rejects.toThrowError(
       'DELETE_COMMENT_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY'
     );
@@ -25,10 +25,10 @@ describe('DeleteCommentUseCase', () => {
       threadId: 123,
       owner: 'user-123',
     };
-    const getCommentUseCase = new DeleteCommentUseCase({});
+    const deleteCommentUseCase = new DeleteCommentUseCase({});
 
     await expect(
-      getCommentUseCase.execute(useCasePayload)
+      deleteCommentUseCase.execute(useCasePayload)
     ).rejects.toThrowError(
       'DELETE_COMMENT_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
@@ -42,20 +42,16 @@ describe('DeleteCommentUseCase', () => {
       owner: 'user-123',
     };
     const mockCommentRepository = new CommentRepository();
-    const getCommentUseCase = new DeleteCommentUseCase({
+    const deleteCommentUseCase = new DeleteCommentUseCase({
       commentRepository: mockCommentRepository,
     });
 
     // Mocking
-    mockCommentRepository.verifyComment = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockCommentRepository.deleteComment = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
+    mockCommentRepository.verifyComment = jest.fn(() => Promise.resolve());
+    mockCommentRepository.deleteComment = jest.fn(() => Promise.resolve());
 
     // Action
-    await getCommentUseCase.execute(useCasePayload);
+    await deleteCommentUseCase.execute(useCasePayload);
 
     // Assert
     expect(mockCommentRepository.verifyComment).toBeCalledWith(

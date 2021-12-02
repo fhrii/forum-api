@@ -27,4 +27,22 @@ describe('an AddedReply entities', () => {
       'ADDED_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION'
     );
   });
+
+  it('should create addedReply entities correctly', () => {
+    // Arrange
+    const payload = {
+      id: 'reply-123',
+      content: 'some reply content',
+      owner: 'user-123',
+    };
+
+    // Action
+    const addedReply = new AddedReply(payload);
+
+    // Assert
+    expect(addedReply).toBeInstanceOf(AddedReply);
+    expect(addedReply.id).toEqual(payload.id);
+    expect(addedReply.content).toEqual(payload.content);
+    expect(addedReply.owner).toEqual(payload.owner);
+  });
 });

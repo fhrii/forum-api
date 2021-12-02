@@ -1,4 +1,3 @@
-import NotFoundError from '../../../Commons/exceptions/NotFoundError';
 import CommentRepository from '../../../Domains/comments/CommentRepository';
 import AddedComment from '../../../Domains/comments/entities/AddedComment';
 import NewComment from '../../../Domains/comments/entities/NewComment';
@@ -43,7 +42,7 @@ describe('AddCommentUseCase', () => {
       threadId: 'thread-123',
       owner: 'user-123',
     };
-    const expectingAddedComment = new AddedComment({
+    const expectedAddedComment = new AddedComment({
       id: 'comment-123',
       content: useCasePayload.content,
       owner: useCasePayload.owner,
@@ -52,23 +51,23 @@ describe('AddCommentUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
 
     // Mocking
-    mockCommentRepository.addComment = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(expectingAddedComment));
-    mockThreadRepository.checkThreadExistance = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
+    mockCommentRepository.addComment = jest.fn(() =>
+      Promise.resolve(expectedAddedComment)
+    );
+    mockThreadRepository.checkThreadExistance = jest.fn(() =>
+      Promise.resolve()
+    );
 
-    const getCommentUseCase = new AddComentUseCase({
+    const addCommentUseCase = new AddComentUseCase({
       commentRepository: mockCommentRepository,
       threadRepository: mockThreadRepository,
     });
 
     // Action
-    const comment = await getCommentUseCase.execute(useCasePayload);
+    const comment = await addCommentUseCase.execute(useCasePayload);
 
     // Assert
-    expect(comment).toStrictEqual(expectingAddedComment);
+    expect(comment).toStrictEqual(expectedAddedComment);
     expect(mockThreadRepository.checkThreadExistance).toBeCalledWith(
       useCasePayload.threadId
     );

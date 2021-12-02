@@ -1,5 +1,6 @@
 import AuthenticationsTableTestHelper from '../../../../tests/AuthenticationsTableTestHelper';
 import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
+import RepliesTableTestHelper from '../../../../tests/RepliesTableTestHelper';
 import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
 import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
 import container from '../../container';
@@ -174,6 +175,7 @@ describe('/threads endpoint', () => {
       await UsersTableTestHelper.addUser({});
       await ThreadsTableTestHelper.addThread({});
       await CommentsTableTestHelper.addComment({});
+      await RepliesTableTestHelper.addReply({});
       const server = await createServer(container);
 
       // Action
@@ -187,7 +189,24 @@ describe('/threads endpoint', () => {
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data.thread).toBeDefined();
-      expect(responseJson.data.thread.comments).toHaveLength(1);
+      const { thread } = responseJson.data;
+      expect(thread.id).toEqual('thread-123');
+      expect(thread.title).toEqual('some title');
+      expect(thread.body).toEqual('some thread body');
+      expect(thread.date).toBeDefined();
+      expect(thread.username).toEqual('dicoding');
+      expect(thread.comments).toHaveLength(1);
+      const comment = thread.comments[0];
+      expect(comment.id).toEqual('comment-123');
+      expect(comment.username).toEqual('dicoding');
+      expect(comment.date).toBeDefined();
+      expect(comment.content).toEqual('some comment content');
+      expect(comment.replies).toHaveLength(1);
+      const reply = comment.replies[0];
+      expect(reply.id).toEqual('reply-123');
+      expect(reply.content).toEqual('some reply content');
+      expect(reply.date).toBeDefined();
+      expect(reply.username).toEqual('dicoding');
     });
 
     it('should throw error when no thread', async () => {
