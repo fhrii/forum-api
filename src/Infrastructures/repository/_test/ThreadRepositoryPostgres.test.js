@@ -1,6 +1,7 @@
 import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
 import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
 import NotFoundError from '../../../Commons/exceptions/NotFoundError';
+import AddedThread from '../../../Domains/threads/entities/AddedThread';
 import NewThread from '../../../Domains/threads/entities/NewThread';
 import pool from '../../database/postgres/pool';
 import ThreadRepositoryPostgres from '../ThreadRepositoryPostgres';
@@ -26,6 +27,11 @@ describe('TokenRepository postgres', () => {
         title: 'dicoding backend',
         body: 'some thread body',
       });
+      const expectedAddedThread = new AddedThread({
+        id: 'thread-123',
+        title: newThread.title,
+        owner: 'user-123',
+      });
       const fakeIdGenerator = () => 123;
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(
         pool,
@@ -40,6 +46,9 @@ describe('TokenRepository postgres', () => {
         'thread-123'
       );
       expect(threads).toHaveLength(1);
+      expect(threads[0].id).toEqual(expectedAddedThread.id);
+      expect(threads[0].title).toEqual(expectedAddedThread.title);
+      expect(threads[0].owner).toEqual(expectedAddedThread.owner);
     });
   });
 
@@ -58,7 +67,7 @@ describe('TokenRepository postgres', () => {
       expect(thread.title).toEqual('some title');
       expect(thread.body).toEqual('some thread body');
       expect(thread.username).toEqual('dicoding');
-      expect(thread.date).toBeDefined();
+      expect(thread.created_at).toBeDefined();
     });
 
     it('should throw error when thread not found', async () => {

@@ -1,9 +1,9 @@
-import { util } from 'prettier';
 import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
 import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
 import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
 import AuthorizationError from '../../../Commons/exceptions/AuthorizationError';
 import NotFoundError from '../../../Commons/exceptions/NotFoundError';
+import AddedComment from '../../../Domains/comments/entities/AddedComment';
 import NewComment from '../../../Domains/comments/entities/NewComment';
 import pool from '../../database/postgres/pool';
 import CommentRepositoryPostgres from '../CommentRepositoryPostgres';
@@ -28,6 +28,11 @@ describe('CommentRepository postgres', () => {
     it('should add comment to database', async () => {
       // Arrange
       const newComment = new NewComment({ content: 'some comment content' });
+      const expectedAddedThread = new AddedComment({
+        id: 'comment-123',
+        content: newComment.content,
+        owner: 'user-123',
+      });
       const fakeIdGenerator = () => 123;
       const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
@@ -46,6 +51,9 @@ describe('CommentRepository postgres', () => {
         'comment-123'
       );
       expect(comments).toHaveLength(1);
+      expect(comments[0].id).toEqual(expectedAddedThread.id);
+      expect(comments[0].content).toEqual(expectedAddedThread.content);
+      expect(comments[0].owner).toEqual(expectedAddedThread.owner);
     });
   });
 
@@ -70,14 +78,14 @@ describe('CommentRepository postgres', () => {
       const deletedComment = comments[1];
       expect(comment.id).toEqual('comment-123');
       expect(comment.username).toEqual('dicoding');
-      expect(comment.date).toBeDefined();
+      expect(comment.created_at).toBeDefined();
       expect(comment.content).toEqual('some comment content');
-      expect(comment).not.toHaveProperty('is_deleted');
+      expect(comment.is_deleted).toEqual(false);
       expect(deletedComment.id).toEqual('comment-124');
       expect(deletedComment.username).toEqual('dicoding');
-      expect(deletedComment.date).toBeDefined();
-      expect(deletedComment.content).toEqual('**komentar telah dihapus**');
-      expect(deletedComment).not.toHaveProperty('is_deleted');
+      expect(deletedComment.created_at).toBeDefined();
+      expect(deletedComment.content).toEqual('some comment content');
+      expect(deletedComment.is_deleted).toEqual(true);
     });
   });
 
@@ -91,6 +99,12 @@ describe('CommentRepository postgres', () => {
       await expect(
         commentRepositoryPostgres.deleteComment('thread-123', 'comment-123')
       ).resolves.not.toThrowError();
+      const comments = await CommentsTableTestHelper.findCommentsById(
+        'comment-123'
+      );
+      expect(comments).toHaveLength(1);
+      expect(comments[0].is_deleted).toEqual(true);
+      expect(comments[0].content).not.toEqual('**komentar telah dihapus**');
     });
 
     it('should throw error when thread or comment not found', async () => {

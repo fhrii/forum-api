@@ -7,6 +7,7 @@ import NewReply from '../../../Domains/replies/entities/NewReply';
 import pool from '../../database/postgres/pool';
 import NotFoundError from '../../../Commons/exceptions/NotFoundError';
 import AuthorizationError from '../../../Commons/exceptions/AuthorizationError';
+import AddedReply from '../../../Domains/replies/entities/AddedReply';
 
 describe('ReplyRepository postgres', () => {
   beforeAll(async () => {
@@ -30,6 +31,11 @@ describe('ReplyRepository postgres', () => {
     it('should add reply to database', async () => {
       // Arrange
       const newReply = new NewReply({ content: 'some reply content' });
+      const expectedAddedReply = new AddedReply({
+        id: 'reply-123',
+        content: newReply.content,
+        owner: 'user-123',
+      });
       const fakeIdGenerator = () => 123;
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(
         pool,
@@ -46,6 +52,9 @@ describe('ReplyRepository postgres', () => {
       // Assert
       const replies = await RepliesTableTestHelper.findRepliesById('reply-123');
       expect(replies).toHaveLength(1);
+      expect(replies[0].id).toEqual(expectedAddedReply.id);
+      expect(replies[0].content).toEqual(expectedAddedReply.content);
+      expect(replies[0].owner).toEqual(expectedAddedReply.owner);
     });
   });
 
@@ -70,14 +79,14 @@ describe('ReplyRepository postgres', () => {
       const deletedReply = replies[1];
       expect(reply.id).toEqual('reply-123');
       expect(reply.username).toEqual('dicoding');
-      expect(reply.date).toBeDefined();
+      expect(reply.created_at).toBeDefined();
       expect(reply.content).toEqual('some reply content');
-      expect(reply).not.toHaveProperty('is_deleted');
+      expect(reply.is_deleted).toEqual(false);
       expect(deletedReply.id).toEqual('reply-124');
       expect(deletedReply.username).toEqual('dicoding');
-      expect(deletedReply.date).toBeDefined();
-      expect(deletedReply.content).toEqual('**balasan telah dihapus**');
-      expect(deletedReply).not.toHaveProperty('is_deleted');
+      expect(deletedReply.created_at).toBeDefined();
+      expect(deletedReply.content).toEqual('some reply content');
+      expect(deletedReply.is_deleted).toEqual(true);
     });
   });
 
@@ -91,6 +100,9 @@ describe('ReplyRepository postgres', () => {
       await expect(
         replyRepositoryPostgres.deleteReply('comment-123', 'reply-123')
       ).resolves.not.toThrowError(NotFoundError);
+      const replies = await RepliesTableTestHelper.findRepliesById('reply-123');
+      expect(replies).toHaveLength(1);
+      expect(replies[0].is_deleted).toEqual(true);
     });
 
     it('should throw error when thread, comment, or reply not found', async () => {
@@ -99,11 +111,7 @@ describe('ReplyRepository postgres', () => {
 
       // Action & Assert
       await expect(
-        replyRepositoryPostgres.deleteReply(
-          'thread-123',
-          'comment-123',
-          'reply-123'
-        )
+        replyRepositoryPostgres.deleteReply('comment-123', 'reply-123')
       ).rejects.toThrowError(NotFoundError);
     });
   });

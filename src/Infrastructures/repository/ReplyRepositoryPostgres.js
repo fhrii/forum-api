@@ -27,20 +27,12 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async getRepliesByCommentId(id) {
     const query = {
-      text: 'SELECT replies.id, users.username, replies.is_deleted, replies.created_at as date, replies.content FROM replies LEFT JOIN users ON replies.owner = users.id WHERE replies.comment_id = $1 ORDER BY replies.created_at',
+      text: 'SELECT replies.id, users.username, replies.is_deleted, replies.created_at, replies.content FROM replies LEFT JOIN users ON replies.owner = users.id WHERE replies.comment_id = $1 ORDER BY replies.created_at',
       values: [id],
     };
 
     const result = await this._pool.query(query);
-    return result.rows.map((reply) => {
-      const { is_deleted: isDeleted, ...newReply } = reply;
-
-      newReply.content = isDeleted
-        ? '**balasan telah dihapus**'
-        : newReply.content;
-
-      return newReply;
-    });
+    return result.rows;
   }
 
   async deleteReply(commentId, id) {
