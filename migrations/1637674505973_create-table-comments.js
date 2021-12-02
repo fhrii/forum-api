@@ -19,14 +19,17 @@ exports.up = (pgm) => {
     is_deleted: {
       type: 'BOOLEAN',
       notNull: true,
+      default: false,
     },
     created_at: {
       type: 'TEXT',
       notNull: true,
+      default: pgm.func('current_timestamp'),
     },
     updated_at: {
       type: 'TEXT',
       notNull: true,
+      default: pgm.func('current_timestamp'),
     },
   });
 
