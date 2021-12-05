@@ -8,8 +8,11 @@
     "airbnb-base",
     "plugin:prettier/recommended",
     "plugin:unicorn/recommended",
-    "plugin:sonarjs/recommended"
+    "plugin:sonarjs/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
   ],
+  "plugins": ["unused-imports"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
@@ -22,6 +25,7 @@
     "no-underscore-dangle": "off",
     "no-unused-vars": "off",
     "sonarjs/no-duplicate-string": "off",
+    "unicorn/prefer-type-error": "off",
     "unicorn/consistent-function-scoping": "off",
     "unicorn/filename-case": [
       "error",
@@ -29,6 +33,34 @@
         "cases": {
           "camelCase": true,
           "pascalCase": true
+        }
+      }
+    ],
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "import/order": [
+      1,
+      {
+        "groups": [
+          "external",
+          "builtin",
+          "internal",
+          "sibling",
+          "parent",
+          "index"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
         }
       }
     ]
