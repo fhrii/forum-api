@@ -5,3 +5,4 @@ yarn.lock
 config/database/test.json
 coverage
 dist
+.env
