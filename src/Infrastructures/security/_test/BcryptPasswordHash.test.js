@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+
 import AuthenticationError from '../../../Commons/exceptions/AuthenticationError';
 import BcryptEncryptionHelper from '../BcryptPasswordHash';
 

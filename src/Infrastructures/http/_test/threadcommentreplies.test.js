@@ -1,11 +1,11 @@
-import pool from '../../database/postgres/pool';
-import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
-import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
 import AuthenticationsTableTestHelper from '../../../../tests/AuthenticationsTableTestHelper';
-import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
-import createServer from '../createServer';
-import container from '../../container';
+import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
 import RepliesTableTestHelper from '../../../../tests/RepliesTableTestHelper';
+import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
+import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
+import container from '../../container';
+import pool from '../../database/postgres/pool';
+import createServer from '../createServer';
 
 describe('/threads/{threadId}/comments/{commentId}/replies endpoint', () => {
   afterEach(async () => {

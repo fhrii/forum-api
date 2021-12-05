@@ -1,12 +1,13 @@
 import Hapi from '@hapi/hapi';
 import Jwt from '@hapi/jwt';
+
 import ClientError from '../../Commons/exceptions/ClientError';
 import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslator';
-import users from '../../Interfaces/http/api/users';
 import authentications from '../../Interfaces/http/api/authentications';
-import threads from '../../Interfaces/http/api/threads';
-import threadComments from '../../Interfaces/http/api/threadcomments';
 import threadCommentReplies from '../../Interfaces/http/api/threadcommentreplies';
+import threadComments from '../../Interfaces/http/api/threadcomments';
+import threads from '../../Interfaces/http/api/threads';
+import users from '../../Interfaces/http/api/users';
 
 const createServer = async (container) => {
   const server = Hapi.server({

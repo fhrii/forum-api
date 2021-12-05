@@ -1,5 +1,5 @@
-import DetailReply from '../../../replies/entities/DetailReply';
 import DetailComment from '../../../comments/entities/DetailComment';
+import DetailReply from '../../../replies/entities/DetailReply';
 import DetailThread from '../DetailThread';
 
 describe('an DetailThread entities', () => {

@@ -1,5 +1,5 @@
-import routes from './routes';
 import AuthenticationsHandler from './handler';
+import routes from './routes';
 
 export default {
   name: 'authentications',

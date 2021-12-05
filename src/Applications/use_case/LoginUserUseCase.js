@@ -1,5 +1,5 @@
-import UserLogin from '../../Domains/users/entities/UserLogin';
 import NewAuthentication from '../../Domains/authentications/entities/NewAuth';
+import UserLogin from '../../Domains/users/entities/UserLogin';
 
 class LoginUserUseCase {
   constructor({

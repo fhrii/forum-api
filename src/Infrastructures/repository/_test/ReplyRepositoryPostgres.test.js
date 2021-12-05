@@ -1,13 +1,13 @@
-import ReplyRepositoryPostgres from '../ReplyRepositoryPostgres';
 import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
+import RepliesTableTestHelper from '../../../../tests/RepliesTableTestHelper';
 import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
 import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
-import RepliesTableTestHelper from '../../../../tests/RepliesTableTestHelper';
+import AuthorizationError from '../../../Commons/exceptions/AuthorizationError';
+import NotFoundError from '../../../Commons/exceptions/NotFoundError';
+import AddedReply from '../../../Domains/replies/entities/AddedReply';
 import NewReply from '../../../Domains/replies/entities/NewReply';
 import pool from '../../database/postgres/pool';
-import NotFoundError from '../../../Commons/exceptions/NotFoundError';
-import AuthorizationError from '../../../Commons/exceptions/AuthorizationError';
-import AddedReply from '../../../Domains/replies/entities/AddedReply';
+import ReplyRepositoryPostgres from '../ReplyRepositoryPostgres';
 
 describe('ReplyRepository postgres', () => {
   beforeAll(async () => {
