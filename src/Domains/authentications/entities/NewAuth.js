@@ -14,7 +14,7 @@ class NewAuth {
     }
 
     if (typeof accessToken !== 'string' || typeof refreshToken !== 'string') {
-      throw new TypeError('NEW_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION');
+      throw new Error('NEW_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }

@@ -1,9 +1,9 @@
-import UserRepository from '../../../Domains/users/UserRepository';
 import AuthenticationRepository from '../../../Domains/authentications/AuthenticationRepository';
+import NewAuth from '../../../Domains/authentications/entities/NewAuth';
+import UserRepository from '../../../Domains/users/UserRepository';
 import AuthenticationTokenManager from '../../security/AuthenticationTokenManager';
 import PasswordHash from '../../security/PasswordHash';
 import LoginUserUseCase from '../LoginUserUseCase';
-import NewAuth from '../../../Domains/authentications/entities/NewAuth';
 
 describe('GetAuthenticationUseCase', () => {
   it('should orchestrating the get authentication action correctly', async () => {

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
-import createServer from './Infrastructures/http/createServer';
 import container from './Infrastructures/container';
+import createServer from './Infrastructures/http/createServer';
 
 dotenv.config();
 

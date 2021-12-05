@@ -1,7 +1,7 @@
 import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
 import InvariantError from '../../../Commons/exceptions/InvariantError';
-import RegisterUser from '../../../Domains/users/entities/RegisterUser';
 import RegisteredUser from '../../../Domains/users/entities/RegisteredUser';
+import RegisterUser from '../../../Domains/users/entities/RegisterUser';
 import pool from '../../database/postgres/pool';
 import UserRepositoryPostgres from '../UserRepositoryPostgres';
 

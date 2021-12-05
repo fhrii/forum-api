@@ -1,4 +1,5 @@
 import Jwt from '@hapi/jwt';
+
 import InvariantError from '../../../Commons/exceptions/InvariantError';
 import JwtTokenManager from '../JwtTokenManager';
 

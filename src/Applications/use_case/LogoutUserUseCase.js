@@ -19,7 +19,7 @@ class LogoutUserUseCase {
     }
 
     if (typeof refreshToken !== 'string') {
-      throw new TypeError(
+      throw new Error(
         'DELETE_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION'
       );
     }

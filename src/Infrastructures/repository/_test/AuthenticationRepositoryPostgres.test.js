@@ -1,5 +1,5 @@
-import InvariantError from '../../../Commons/exceptions/InvariantError';
 import AuthenticationsTableTestHelper from '../../../../tests/AuthenticationsTableTestHelper';
+import InvariantError from '../../../Commons/exceptions/InvariantError';
 import pool from '../../database/postgres/pool';
 import AuthenticationRepositoryPostgres from '../AuthenticationRepositoryPostgres';
 

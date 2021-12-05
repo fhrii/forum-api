@@ -14,7 +14,7 @@ class UserLogin {
     }
 
     if (typeof username !== 'string' || typeof password !== 'string') {
-      throw new TypeError('USER_LOGIN.NOT_MEET_DATA_TYPE_SPECIFICATION');
+      throw new Error('USER_LOGIN.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }

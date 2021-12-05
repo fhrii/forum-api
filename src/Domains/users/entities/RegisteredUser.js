@@ -19,7 +19,7 @@ class RegisteredUser {
       typeof username !== 'string' ||
       typeof fullname !== 'string'
     ) {
-      throw new TypeError('REGISTERED_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
+      throw new Error('REGISTERED_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
 }

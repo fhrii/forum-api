@@ -1,6 +1,6 @@
 import LoginUserUseCase from '../../../../Applications/use_case/LoginUserUseCase';
-import RefreshAuthenticationUseCase from '../../../../Applications/use_case/RefreshAuthenticationUseCase';
 import LogoutUserUseCase from '../../../../Applications/use_case/LogoutUserUseCase';
+import RefreshAuthenticationUseCase from '../../../../Applications/use_case/RefreshAuthenticationUseCase';
 
 class AuthenticationsHandler {
   constructor(container) {

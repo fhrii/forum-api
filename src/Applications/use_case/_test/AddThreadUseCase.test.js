@@ -1,7 +1,7 @@
-import AddThreadUseCase from '../AddThreadUseCase';
 import AddedThread from '../../../Domains/threads/entities/AddedThread';
 import NewThread from '../../../Domains/threads/entities/NewThread';
 import ThreadRepository from '../../../Domains/threads/ThreadRepository';
+import AddThreadUseCase from '../AddThreadUseCase';
 
 describe('AddThreadUseCase', () => {
   it('should throw error if use case payload  not contain owner', async () => {

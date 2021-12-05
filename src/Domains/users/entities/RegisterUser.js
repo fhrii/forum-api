@@ -19,7 +19,7 @@ class RegisterUser {
       typeof password !== 'string' ||
       typeof fullname !== 'string'
     ) {
-      throw new TypeError('REGISTER_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
+      throw new Error('REGISTER_USER.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
 
     if (username.length > 50) {
