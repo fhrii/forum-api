@@ -130,9 +130,14 @@ describe('GetThreadUseCase', () => {
     mockReplyRepository.getRepliesByCommentId = jest.fn(() =>
       Promise.resolve(expectedReplies)
     );
-    mockCommentLikeRepository.getNumberOfCommentLikeByCommentId = jest.fn(() =>
+    mockCommentLikeRepository.getNumberOfCommentLikesByCommentId = jest.fn(() =>
       Promise.resolve(1)
     );
+
+    const asu =
+      await mockCommentLikeRepository.getNumberOfCommentLikesByCommentId(
+        'comment-123'
+      );
 
     // Action
     const getThreadUseCase = new GetThreadUseCase({
@@ -158,10 +163,10 @@ describe('GetThreadUseCase', () => {
       expectedComments[1].id
     );
     expect(
-      mockCommentLikeRepository.getNumberOfCommentLikeByCommentId
+      mockCommentLikeRepository.getNumberOfCommentLikesByCommentId
     ).toBeCalledWith(expectedComments[0].id);
     expect(
-      mockCommentLikeRepository.getNumberOfCommentLikeByCommentId
+      mockCommentLikeRepository.getNumberOfCommentLikesByCommentId
     ).toBeCalledWith(expectedComments[1].id);
   });
 });

@@ -1,5 +1,6 @@
 import CommentLikesTableHelper from '../../../../tests/CommentLikesTableHelper';
 import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
+import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
 import UsersTableTestHelper from '../../../../tests/UsersTableTestHelper';
 import NotFoundError from '../../../Commons/exceptions/NotFoundError';
 import pool from '../../database/postgres/pool';
@@ -8,6 +9,7 @@ import CommentLikeRepositoryPostgres from '../CommentLikeRepositoryPostgres';
 describe('CommentLikeRepository postgres', () => {
   beforeAll(async () => {
     await UsersTableTestHelper.addUser({});
+    await ThreadsTableTestHelper.addThread({});
     await CommentsTableTestHelper.addComment({});
   });
 
@@ -56,28 +58,24 @@ describe('CommentLikeRepository postgres', () => {
       );
 
       // Action
-      await commentLikeRepositoryPostgres.toggleCommentLikeByCommentid(
-        'commentlike-123'
+      await commentLikeRepositoryPostgres.toggleCommentLike(
+        'comment-123',
+        'user-123'
       );
 
       // Assert
-      const commentLikes =
-        CommentLikesTableHelper.findCommentLikesById('commentlike-123');
+      const commentLikes = await CommentLikesTableHelper.findCommentLikesById(
+        'commentlike-123'
+      );
       expect(commentLikes).toHaveLength(1);
       expect(commentLikes[0].is_deleted).toEqual(true);
     });
   });
 
   describe('getNumberOfCommentLikesByCommentId function', () => {
-    it('should number of comment like correctly', async () => {
+    it('should get number of comment like correctly', async () => {
       // Arrange
-      await Promise.all([
-        CommentLikesTableHelper.addCommentLike({}),
-        CommentLikesTableHelper.addCommentLike({
-          id: 'commentlike-124',
-          isDeleted: true,
-        }),
-      ]);
+      await CommentLikesTableHelper.addCommentLike({});
       const commentLikeRepositoryPostgres = new CommentLikeRepositoryPostgres(
         pool,
         {}
@@ -91,9 +89,9 @@ describe('CommentLikeRepository postgres', () => {
 
       // Assert
       const commentLikes = await CommentLikesTableHelper.findCommentLikesById(
-        'comment-123'
+        'commentlike-123'
       );
-      expect(commentLikes).toHaveLength(2);
+      expect(commentLikes).toHaveLength(1);
       expect(numberOfCommentLike).toEqual(1);
     });
   });
@@ -110,7 +108,8 @@ describe('CommentLikeRepository postgres', () => {
       // Action & Assert
       await expect(
         commentLikeRepositoryPostgres.checkCommentLikeExistance(
-          'commentlike-123'
+          'commentlike-123',
+          'user-123'
         )
       ).resolves.not.toThrowError(NotFoundError);
     });

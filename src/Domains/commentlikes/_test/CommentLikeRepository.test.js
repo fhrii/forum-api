@@ -9,9 +9,9 @@ describe('ComentLikeRepository interface', () => {
     expect(() => commentLikeRepository.addCommentLike('', '')).toThrowError(
       'COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED'
     );
-    expect(() =>
-      commentLikeRepository.toggleCommentLikeByCommentId('')
-    ).toThrowError('COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+    expect(() => commentLikeRepository.toggleCommentLike('')).toThrowError(
+      'COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED'
+    );
     expect(() =>
       commentLikeRepository.getNumberOfCommentLikesByCommentId('')
     ).toThrowError('COMMENT_LIKE_REPOSITORY.METHOD_NOT_IMPLEMENTED');
