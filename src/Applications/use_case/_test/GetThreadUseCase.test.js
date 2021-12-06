@@ -1,3 +1,4 @@
+import CommentLikeRepository from '../../../Domains/commentlikes/CommentLikeRepository';
 import CommentRepository from '../../../Domains/comments/CommentRepository';
 import DetailComment from '../../../Domains/comments/entities/DetailComment';
 import DetailReply from '../../../Domains/replies/entities/DetailReply';
@@ -91,6 +92,7 @@ describe('GetThreadUseCase', () => {
         }) =>
           new DetailComment({
             ...comment,
+            likeCount: 1,
             content: !isCommentDeleted
               ? commentContent
               : '**komentar telah dihapus**',
@@ -116,6 +118,7 @@ describe('GetThreadUseCase', () => {
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
     const mockReplyRepository = new ReplyRepository();
+    const mockCommentLikeRepository = new CommentLikeRepository();
 
     // Mocking
     mockThreadRepository.getThreadById = jest.fn(() =>
@@ -127,12 +130,16 @@ describe('GetThreadUseCase', () => {
     mockReplyRepository.getRepliesByCommentId = jest.fn(() =>
       Promise.resolve(expectedReplies)
     );
+    mockCommentLikeRepository.getNumberOfCommentLikeByCommentId = jest.fn(() =>
+      Promise.resolve(1)
+    );
 
     // Action
     const getThreadUseCase = new GetThreadUseCase({
       threadRepository: mockThreadRepository,
       commentRepository: mockCommentRepository,
       replyRepository: mockReplyRepository,
+      commentLikeRepository: mockCommentLikeRepository,
     });
     const thread = await getThreadUseCase.execute(useCasePayload);
 
@@ -150,5 +157,11 @@ describe('GetThreadUseCase', () => {
     expect(mockReplyRepository.getRepliesByCommentId).toBeCalledWith(
       expectedComments[1].id
     );
+    expect(
+      mockCommentLikeRepository.getNumberOfCommentLikeByCommentId
+    ).toBeCalledWith(expectedComments[0].id);
+    expect(
+      mockCommentLikeRepository.getNumberOfCommentLikeByCommentId
+    ).toBeCalledWith(expectedComments[1].id);
   });
 });
