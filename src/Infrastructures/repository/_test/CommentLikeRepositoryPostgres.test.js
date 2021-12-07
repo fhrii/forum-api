@@ -8,7 +8,10 @@ import CommentLikeRepositoryPostgres from '../CommentLikeRepositoryPostgres';
 
 describe('CommentLikeRepository postgres', () => {
   beforeAll(async () => {
-    await UsersTableTestHelper.addUser({});
+    await Promise.all([
+      UsersTableTestHelper.addUser({}),
+      UsersTableTestHelper.addUser({ id: 'user-124', username: 'fhr' }),
+    ]);
     await ThreadsTableTestHelper.addThread({});
     await CommentsTableTestHelper.addComment({});
   });
@@ -78,7 +81,14 @@ describe('CommentLikeRepository postgres', () => {
   describe('getNumberOfCommentLikesByCommentId function', () => {
     it('should get number of comment like correctly', async () => {
       // Arrange
-      await CommentLikesTableHelper.addCommentLike({});
+      await Promise.all([
+        await CommentLikesTableHelper.addCommentLike({}),
+        await CommentLikesTableHelper.addCommentLike({
+          id: 'commentlike-124',
+          owner: 'user-124',
+          isDeleted: true,
+        }),
+      ]);
       const commentLikeRepositoryPostgres = new CommentLikeRepositoryPostgres(
         pool,
         {}
@@ -91,10 +101,11 @@ describe('CommentLikeRepository postgres', () => {
         );
 
       // Assert
-      const commentLikes = await CommentLikesTableHelper.findCommentLikesById(
-        'commentlike-123'
-      );
-      expect(commentLikes).toHaveLength(1);
+      const commentLikes =
+        await CommentLikesTableHelper.findCommentLikesByCommentId(
+          'comment-123'
+        );
+      expect(commentLikes).toHaveLength(2);
       expect(numberOfCommentLike).toEqual(1);
     });
   });
@@ -111,7 +122,7 @@ describe('CommentLikeRepository postgres', () => {
       // Action & Assert
       await expect(
         commentLikeRepositoryPostgres.checkCommentLikeExistance(
-          'commentlike-123',
+          'comment-123',
           'user-123'
         )
       ).resolves.not.toThrowError(NotFoundError);
@@ -126,9 +137,7 @@ describe('CommentLikeRepository postgres', () => {
 
       // Action & Assert
       await expect(
-        commentLikeRepositoryPostgres.checkCommentLikeExistance(
-          'commentlike-123'
-        )
+        commentLikeRepositoryPostgres.checkCommentLikeExistance('comment-123')
       ).rejects.toThrowError(NotFoundError);
     });
   });
