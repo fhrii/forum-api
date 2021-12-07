@@ -1,3 +1,4 @@
+import AuthenticationsTableTestHelper from '../../../../tests/AuthenticationsTableTestHelper';
 import CommentLikesTableHelper from '../../../../tests/CommentLikesTableHelper';
 import CommentsTableTestHelper from '../../../../tests/CommentsTableTestHelper';
 import ThreadsTableTestHelper from '../../../../tests/ThreadsTableTestHelper';
@@ -11,6 +12,7 @@ describe('/threads/{threadId}/comments/{commentId}/likes', () => {
     await CommentLikesTableHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
+    await AuthenticationsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });
 
