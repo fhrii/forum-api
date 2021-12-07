@@ -16,10 +16,19 @@ const CommentLikesTableHelper = {
 
     await pool.query(query);
   },
-
   async findCommentLikesById(id) {
     const query = {
       text: 'SELECT * FROM commentlikes WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await pool.query(query);
+
+    return result.rows;
+  },
+  async findCommentLikesByCommentId(id) {
+    const query = {
+      text: 'SELECT * FROM commentlikes WHERW comment_id = $1',
       values: [id],
     };
 
