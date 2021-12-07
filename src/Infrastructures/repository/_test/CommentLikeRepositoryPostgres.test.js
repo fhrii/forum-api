@@ -18,6 +18,9 @@ describe('CommentLikeRepository postgres', () => {
   });
 
   afterAll(async () => {
+    await CommentsTableTestHelper.cleanTable();
+    await ThreadsTableTestHelper.cleanTable();
+    await UsersTableTestHelper.cleanTable();
     await pool.end();
   });
 
