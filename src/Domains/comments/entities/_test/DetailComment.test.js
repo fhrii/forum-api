@@ -76,7 +76,7 @@ describe('an DetailComment entities', () => {
     expect(detailComment.content).toEqual(payload.content);
     expect(detailComment.date).toEqual(payload.date);
     expect(detailComment.username).toEqual(payload.username);
-    expect(detailComment.likesCount).toEqual(payload.likesCount);
+    expect(detailComment.likeCount).toEqual(payload.likeCount);
     expect(detailComment.replies).toEqual(payload.replies);
   });
 });
