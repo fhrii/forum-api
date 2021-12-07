@@ -38,7 +38,7 @@ DomainErrorTranslator._directories = {
     'tidak dapat membuat komentar baru karena tipe data tidak sesuai'
   ),
   'NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'tidak dapat membuat komentar baru karena properti yang dibutuhkan tidak ada'
+    'tidak dapat membuat balasan baru karena properti yang dibutuhkan tidak ada'
   ),
   'NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
     'tidak dapat membuat balasan baru karena tipe data tidak sesuai'
@@ -52,10 +52,10 @@ DomainErrorTranslator._directories = {
   'DELETE_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION':
     new InvariantError('refresh token harus string'),
   'ADD_THREAD_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'harus mengirimkan owner'
+    'harus mengirimkan id user'
   ),
   'ADD_THREAD_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
-    'owner harus string'
+    'id user harus string'
   ),
   'GET_THREAD_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
     'harus mengirimkan id thread'
@@ -64,28 +64,32 @@ DomainErrorTranslator._directories = {
     'id thread harus string'
   ),
   'ADD_COMMENT_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'harus mengirimkan id thread dan owner'
+    'harus mengirimkan id thread dan id user'
   ),
-  'ADD_COMENT_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATON': new InvariantError(
-    'id thread dan owner harus string'
+  'ADD_COMMENT_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
+    'id thread dan id user harus string'
   ),
   'DELETE_COMMENT_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'harus mengirimkan id comment, id thread, dan owner'
+    'harus mengirimkan id thread, id komentar, dan id user'
   ),
   'DELETE_COMMENT_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION':
-    new InvariantError('id comment, id thread, dan owner harus string'),
+    new InvariantError('id thread, id komentar, dan id user harus string'),
   'ADD_REPLY_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'harus mengirimkan id comment, id thread, dan owner'
+    'harus mengirimkan id thread, id komentar, dan id user'
   ),
-  'ADD_REPLY_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATON': new InvariantError(
-    'id comment, id thread, dan owner harus string'
+  'ADD_REPLY_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
+    'id thread, id komentar, dan id user harus string'
   ),
   'DELETE_REPLY_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'harus mengirimkan id comment, id reply, dan owner'
+    'harus mengirimkan id komentar, id balasan, dan id user'
   ),
   'DELETE_REPLY_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
-    'id comment, id reply, dan owner harus string'
+    'id komentar, id balasan, dan id user harus string'
   ),
+  'TOGGLE_COMMENT_LIKE_USE_CASE.NOT_CONTAIN_NEEDED_PROPERTY':
+    new InvariantError('harus mengirimkan id thread, id komentar, dan id user'),
+  'TOGGLE_COMMENT_LIKE_USE_CASE.NOT_MEET_DATA_TYPE_SPECIFICATION':
+    new InvariantError('id thread, id komentar, dan id user harus string'),
 };
 
 export default DomainErrorTranslator;
