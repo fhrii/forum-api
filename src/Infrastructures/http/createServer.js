@@ -4,6 +4,7 @@ import Jwt from '@hapi/jwt';
 import ClientError from '../../Commons/exceptions/ClientError';
 import DomainErrorTranslator from '../../Commons/exceptions/DomainErrorTranslator';
 import authentications from '../../Interfaces/http/api/authentications';
+import threadCommentLikes from '../../Interfaces/http/api/threadcommentlikes';
 import threadCommentReplies from '../../Interfaces/http/api/threadcommentreplies';
 import threadComments from '../../Interfaces/http/api/threadcomments';
 import threads from '../../Interfaces/http/api/threads';
@@ -90,6 +91,10 @@ const createServer = async (container) => {
     },
     {
       plugin: threadCommentReplies,
+      options: { container },
+    },
+    {
+      plugin: threadCommentLikes,
       options: { container },
     },
   ]);
