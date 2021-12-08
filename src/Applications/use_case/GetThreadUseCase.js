@@ -3,10 +3,16 @@ import DetailReply from '../../Domains/replies/entities/DetailReply';
 import DetailThread from '../../Domains/threads/entities/DetailThread';
 
 class GetThreadUseCase {
-  constructor({ threadRepository, commentRepository, replyRepository }) {
+  constructor({
+    threadRepository,
+    commentRepository,
+    replyRepository,
+    commentLikeRepository,
+  }) {
     this._threadRepository = threadRepository;
     this._commentRepository = commentRepository;
     this._replyRepository = replyRepository;
+    this._commentLikeRepository = commentLikeRepository;
   }
 
   async execute(useCasePayload) {
@@ -28,14 +34,18 @@ class GetThreadUseCase {
           is_deleted: isCommentDeleted,
           ...newComment
         } = comment;
-        const replies = await this._replyRepository.getRepliesByCommentId(
-          newComment.id
-        );
+        const [replies, likeCount] = await Promise.all([
+          this._replyRepository.getRepliesByCommentId(newComment.id),
+          this._commentLikeRepository.getNumberOfCommentLikesByCommentId(
+            newComment.id
+          ),
+        ]);
 
         newComment.content = !isCommentDeleted
           ? commentContent
           : '**komentar telah dihapus**';
         newComment.date = commentDate;
+        newComment.likeCount = likeCount;
         newComment.replies = replies.map(
           ({
             created_at: replyDate,
@@ -52,7 +62,7 @@ class GetThreadUseCase {
             })
         );
 
-        return new DetailComment({ ...newComment, date: commentDate });
+        return new DetailComment(newComment);
       })
     );
 

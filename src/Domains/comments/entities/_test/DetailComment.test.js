@@ -10,6 +10,7 @@ describe('an DetailComment entities', () => {
       content: 'some comment content',
       date: 'some-date',
       username: 'user-123',
+      replies: [],
     };
 
     // Action & Assert
@@ -25,7 +26,8 @@ describe('an DetailComment entities', () => {
       content: 'some comment content',
       date: 'some-date',
       username: 'user-123',
-      replies: 'reply',
+      likeCount: '0',
+      replies: [],
     };
     const anotherPayload = {
       ...payload,
@@ -54,6 +56,7 @@ describe('an DetailComment entities', () => {
       content: 'some comment content',
       date: 'some-date',
       username: 'user-123',
+      likeCount: 0,
       replies: [
         new DetailReply({
           id: 'reply-123',
@@ -73,6 +76,7 @@ describe('an DetailComment entities', () => {
     expect(detailComment.content).toEqual(payload.content);
     expect(detailComment.date).toEqual(payload.date);
     expect(detailComment.username).toEqual(payload.username);
+    expect(detailComment.likeCount).toEqual(payload.likeCount);
     expect(detailComment.replies).toEqual(payload.replies);
   });
 });

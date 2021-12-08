@@ -64,6 +64,7 @@ describe('an DetailThread entities', () => {
           content: 'some comment content',
           date: 'some-date',
           username: 'user-123',
+          likeCount: 0,
           replies: [
             new DetailReply({
               id: 'reply-123',
