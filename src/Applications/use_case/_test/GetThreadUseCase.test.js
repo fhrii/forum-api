@@ -134,11 +134,6 @@ describe('GetThreadUseCase', () => {
       Promise.resolve(1)
     );
 
-    const asu =
-      await mockCommentLikeRepository.getNumberOfCommentLikesByCommentId(
-        'comment-123'
-      );
-
     // Action
     const getThreadUseCase = new GetThreadUseCase({
       threadRepository: mockThreadRepository,
