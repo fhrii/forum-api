@@ -8,6 +8,7 @@ import { nanoid } from 'nanoid';
 
 import pool from './database/postgres/pool';
 import AuthenticationRepositoryPostgres from './repository/AuthenticationRepositoryPostgres';
+import CommentLikeRepositoryPostgres from './repository/CommentLikeRepositoryPostgres';
 import CommentRepositoryPostgres from './repository/CommentRepositoryPostgres';
 import ReplyRepositoryPostgres from './repository/ReplyRepositoryPostgres';
 import ThreadRepositoryPostgres from './repository/ThreadRepositoryPostgres';
@@ -27,7 +28,9 @@ import GetThreadUseCase from '../Applications/use_case/GetThreadUseCase';
 import LoginUserUseCase from '../Applications/use_case/LoginUserUseCase';
 import LogoutUserUseCase from '../Applications/use_case/LogoutUserUseCase';
 import RefreshAuthenticationUseCase from '../Applications/use_case/RefreshAuthenticationUseCase';
+import ToggleCommentLikeUseCase from '../Applications/use_case/ToggleCommentLikeUseCase';
 import AuthenticationRepository from '../Domains/authentications/AuthenticationRepository';
+import CommentLikeRepository from '../Domains/commentlikes/CommentLikeRepository';
 import CommentRepository from '../Domains/comments/CommentRepository';
 import ReplyRepository from '../Domains/replies/ReplyRepository';
 import ThreadRepository from '../Domains/threads/ThreadRepository';
@@ -80,6 +83,13 @@ container.register([
   {
     key: ReplyRepository.name,
     Class: ReplyRepositoryPostgres,
+    parameter: {
+      dependencies: [{ concrete: pool }, { concrete: nanoid }],
+    },
+  },
+  {
+    key: CommentLikeRepository.name,
+    Class: CommentLikeRepositoryPostgres,
     parameter: {
       dependencies: [{ concrete: pool }, { concrete: nanoid }],
     },
@@ -201,6 +211,7 @@ container.register([
         { name: 'threadRepository', internal: ThreadRepository.name },
         { name: 'commentRepository', internal: CommentRepository.name },
         { name: 'replyRepository', internal: ReplyRepository.name },
+        { name: 'commentLikeRepository', internal: CommentLikeRepository.name },
       ],
     },
   },
@@ -244,6 +255,18 @@ container.register([
       injectType: 'destructuring',
       dependencies: [
         { name: 'replyRepository', internal: ReplyRepository.name },
+      ],
+    },
+  },
+  {
+    key: ToggleCommentLikeUseCase.name,
+    Class: ToggleCommentLikeUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        { name: 'threadRepository', internal: ThreadRepository.name },
+        { name: 'commentRepository', internal: CommentRepository.name },
+        { name: 'commentLikeRepository', internal: CommentLikeRepository.name },
       ],
     },
   },
