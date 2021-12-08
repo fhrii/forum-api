@@ -18,9 +18,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/forumapi-api
+            cd ~/forum-api
             git pull origin master
             npm install
             npm run migrate up
             npm run build
-            pm2 restart auth-api
+            pm2 restart forum-api
