@@ -10,7 +10,7 @@ describe('ReplyRepository interface', () => {
       'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED'
     );
     await expect(
-      replyRepository.getRepliesByCommentId('')
+      replyRepository.getRepliesByCommentIds([''])
     ).rejects.toThrowError('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
     await expect(replyRepository.deleteReply('', '')).rejects.toThrowError(
       'REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED'
