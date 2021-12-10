@@ -48,6 +48,7 @@ describe('GetThreadUseCase', () => {
     const expectedComments = [
       {
         id: 'comment-123',
+        thread_id: 'thread-123',
         username: 'dicoding',
         is_deleted: false,
         created_at: definedDate,
@@ -55,15 +56,22 @@ describe('GetThreadUseCase', () => {
       },
       {
         id: 'comment-234',
+        thread_id: 'thread-123',
         username: 'dicoding',
         is_deleted: true,
         created_at: definedDate,
         content: 'some comment2 content',
       },
     ];
+    const expectedCommentLikes = [
+      {
+        comment_id: 'comment-123',
+      },
+    ];
     const expectedReplies = [
       {
         id: 'reply-123',
+        comment_id: 'comment-123',
         username: 'dicoding',
         is_deleted: true,
         created_at: definedDate,
@@ -71,6 +79,7 @@ describe('GetThreadUseCase', () => {
       },
       {
         id: 'reply-234',
+        comment_id: 'comment-234',
         username: 'dicoding',
         is_deleted: false,
         created_at: definedDate,
@@ -83,37 +92,42 @@ describe('GetThreadUseCase', () => {
       body: expectedThread.body,
       username: expectedThread.username,
       date: expectedThread.created_at,
-      comments: expectedComments.map(
-        ({
-          created_at: commentDate,
-          content: commentContent,
-          is_deleted: isCommentDeleted,
-          ...comment
-        }) =>
-          new DetailComment({
-            ...comment,
-            likeCount: 1,
-            content: !isCommentDeleted
-              ? commentContent
-              : '**komentar telah dihapus**',
-            date: commentDate,
-            replies: expectedReplies.map(
-              ({
-                created_at: replyDate,
-                content: replyContent,
-                is_deleted: isReplyDeleted,
-                ...reply
-              }) =>
-                new DetailReply({
-                  ...reply,
-                  content: !isReplyDeleted
-                    ? replyContent
-                    : '**balasan telah dihapus**',
-                  date: replyDate,
-                })
-            ),
-          })
-      ),
+      comments: [
+        new DetailComment({
+          id: 'comment-123',
+          content: 'some comment content',
+          date: definedDate,
+          username: 'dicoding',
+          likeCount: 1,
+          isDeleted: false,
+          replies: [
+            new DetailReply({
+              id: 'reply-123',
+              username: 'dicoding',
+              date: definedDate,
+              content: 'some reply content',
+              isDeleted: true,
+            }),
+          ],
+        }),
+        new DetailComment({
+          id: 'comment-234',
+          content: 'some comment content',
+          date: definedDate,
+          username: 'dicoding',
+          likeCount: 0,
+          isDeleted: true,
+          replies: [
+            new DetailReply({
+              id: 'reply-234',
+              username: 'dicoding',
+              date: definedDate,
+              content: 'some reply2 content',
+              isDeleted: false,
+            }),
+          ],
+        }),
+      ],
     });
     const mockThreadRepository = new ThreadRepository();
     const mockCommentRepository = new CommentRepository();
@@ -127,11 +141,11 @@ describe('GetThreadUseCase', () => {
     mockCommentRepository.getCommentsByThreadId = jest.fn(() =>
       Promise.resolve(expectedComments)
     );
-    mockReplyRepository.getRepliesByCommentId = jest.fn(() =>
+    mockReplyRepository.getRepliesByCommentIds = jest.fn(() =>
       Promise.resolve(expectedReplies)
     );
-    mockCommentLikeRepository.getNumberOfCommentLikesByCommentId = jest.fn(() =>
-      Promise.resolve(1)
+    mockCommentLikeRepository.getNumberOfCommentLikesByCommentIds = jest.fn(
+      () => Promise.resolve(expectedCommentLikes)
     );
 
     // Action
@@ -151,17 +165,12 @@ describe('GetThreadUseCase', () => {
     expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith(
       useCasePayload.id
     );
-    expect(mockReplyRepository.getRepliesByCommentId).toBeCalledWith(
-      expectedComments[0].id
-    );
-    expect(mockReplyRepository.getRepliesByCommentId).toBeCalledWith(
-      expectedComments[1].id
-    );
+    expect(mockReplyRepository.getRepliesByCommentIds).toBeCalledWith([
+      expectedComments[0].id,
+      expectedComments[1].id,
+    ]);
     expect(
-      mockCommentLikeRepository.getNumberOfCommentLikesByCommentId
-    ).toBeCalledWith(expectedComments[0].id);
-    expect(
-      mockCommentLikeRepository.getNumberOfCommentLikesByCommentId
-    ).toBeCalledWith(expectedComments[1].id);
+      mockCommentLikeRepository.getNumberOfCommentLikesByCommentIds
+    ).toBeCalledWith([expectedComments[0].id, expectedComments[1].id]);
   });
 });

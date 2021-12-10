@@ -18,49 +18,39 @@ class GetThreadUseCase {
   async execute(useCasePayload) {
     this._verifyPayload(useCasePayload);
     const { id } = useCasePayload;
-    const [{ created_at: threadDate, ...thread }, comments] = await Promise.all(
-      [
-        this._threadRepository.getThreadById(id),
-        this._commentRepository.getCommentsByThreadId(id),
-      ]
-    );
+    const [thread, comments] = await Promise.all([
+      this._threadRepository.getThreadById(id),
+      this._commentRepository.getCommentsByThreadId(id),
+    ]);
 
-    thread.date = threadDate;
+    const commentIds = comments.map((comment) => comment.id);
+    const [replies, likes] = await Promise.all([
+      this._replyRepository.getRepliesByCommentIds(commentIds),
+      this._commentLikeRepository.getNumberOfCommentLikesByCommentIds(
+        commentIds
+      ),
+    ]);
+
+    thread.date = thread.created_at;
     thread.comments = await Promise.all(
       comments.map(async (comment) => {
-        const {
-          created_at: commentDate,
-          content: commentContent,
-          is_deleted: isCommentDeleted,
-          ...newComment
-        } = comment;
-        const [replies, likeCount] = await Promise.all([
-          this._replyRepository.getRepliesByCommentId(newComment.id),
-          this._commentLikeRepository.getNumberOfCommentLikesByCommentId(
-            newComment.id
-          ),
-        ]);
+        const newComment = { ...comment };
 
-        newComment.content = !isCommentDeleted
-          ? commentContent
-          : '**komentar telah dihapus**';
-        newComment.date = commentDate;
-        newComment.likeCount = likeCount;
-        newComment.replies = replies.map(
-          ({
-            created_at: replyDate,
-            content: replyContent,
-            is_deleted: isReplyDeleted,
-            ...reply
-          }) =>
-            new DetailReply({
-              ...reply,
-              content: !isReplyDeleted
-                ? replyContent
-                : '**balasan telah dihapus**',
-              date: replyDate,
-            })
-        );
+        newComment.date = comment.created_at;
+        newComment.likeCount = likes.filter(
+          (like) => like.comment_id === comment.id
+        ).length;
+        newComment.isDeleted = comment.is_deleted;
+        newComment.replies = replies
+          .filter((reply) => reply.comment_id === comment.id)
+          .map(
+            (reply) =>
+              new DetailReply({
+                ...reply,
+                date: reply.created_at,
+                isDeleted: reply.is_deleted,
+              })
+          );
 
         return new DetailComment(newComment);
       })
