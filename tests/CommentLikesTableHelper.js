@@ -36,6 +36,16 @@ const CommentLikesTableHelper = {
 
     return result.rows;
   },
+  async findCommentLikesByCommentIds(ids) {
+    const query = {
+      text: 'SELECT * FROM commentlikes WHERE comment_id = ANY($1::text[])',
+      values: [ids],
+    };
+
+    const result = await pool.query(query);
+
+    return result.rows;
+  },
   async cleanTable() {
     await pool.query('DELETE FROM commentlikes WHERE 1=1');
   },
