@@ -14,6 +14,7 @@ describe('CommentLikeRepository postgres', () => {
     ]);
     await ThreadsTableTestHelper.addThread({});
     await CommentsTableTestHelper.addComment({});
+    await CommentsTableTestHelper.addComment({ id: 'comment-124' });
   });
 
   afterEach(async () => {
@@ -78,13 +79,14 @@ describe('CommentLikeRepository postgres', () => {
     });
   });
 
-  describe('getNumberOfCommentLikesByCommentId function', () => {
-    it('should get number of comment like correctly', async () => {
+  describe('getNumberOfCommentLikesByCommentIds function', () => {
+    it('should comment likes correctly', async () => {
       // Arrange
       await Promise.all([
         await CommentLikesTableHelper.addCommentLike({}),
         await CommentLikesTableHelper.addCommentLike({
           id: 'commentlike-124',
+          commentId: 'comment-124',
           owner: 'user-124',
           isDeleted: true,
         }),
@@ -96,17 +98,20 @@ describe('CommentLikeRepository postgres', () => {
 
       // Action
       const numberOfCommentLike =
-        await commentLikeRepositoryPostgres.getNumberOfCommentLikesByCommentId(
-          'comment-123'
+        await commentLikeRepositoryPostgres.getNumberOfCommentLikesByCommentIds(
+          ['comment-123'],
+          ['comment-124']
         );
 
       // Assert
       const commentLikes =
-        await CommentLikesTableHelper.findCommentLikesByCommentId(
-          'comment-123'
-        );
+        await CommentLikesTableHelper.findCommentLikesByCommentIds([
+          'comment-123',
+          'comment-124',
+        ]);
       expect(commentLikes).toHaveLength(2);
-      expect(numberOfCommentLike).toEqual(1);
+      expect(numberOfCommentLike.length).toEqual(1);
+      expect(numberOfCommentLike[0].comment_id).toEqual('comment-123');
     });
   });
 
