@@ -37,6 +37,7 @@ describe('an DetailThread entities', () => {
           content: 'some reply content',
           date: 'some-date',
           username: 'user-123',
+          isDeleted: false,
         }),
       ],
     };
@@ -65,12 +66,14 @@ describe('an DetailThread entities', () => {
           date: 'some-date',
           username: 'user-123',
           likeCount: 0,
+          isDeleted: false,
           replies: [
             new DetailReply({
               id: 'reply-123',
               content: 'some reply content',
               date: 'some-date',
               username: 'user-123',
+              isDeleted: false,
             }),
           ],
         }),

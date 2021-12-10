@@ -20,15 +20,15 @@ class CommentLikeRepositoryPostgres extends CommentLikeRepository {
     return result.rows[0];
   }
 
-  async getNumberOfCommentLikesByCommentId(commentId) {
+  async getNumberOfCommentLikesByCommentIds(commentIds) {
     const query = {
-      text: 'SELECT COUNT(*) FROM commentlikes WHERE comment_id = $1 AND is_deleted = false',
-      values: [commentId],
+      text: 'SELECT comment_id FROM commentlikes WHERE comment_id = ANY($1::text[]) AND is_deleted = false',
+      values: [commentIds],
     };
 
     const result = await this._pool.query(query);
 
-    return +result.rows[0].count;
+    return result.rows;
   }
 
   async toggleCommentLike(commentId, owner) {

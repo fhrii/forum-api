@@ -14,6 +14,7 @@ describe('ReplyRepository postgres', () => {
     await UsersTableTestHelper.addUser({});
     await ThreadsTableTestHelper.addThread({});
     await CommentsTableTestHelper.addComment({});
+    await CommentsTableTestHelper.addComment({ id: 'comment-124' });
   });
 
   afterEach(async () => {
@@ -58,20 +59,22 @@ describe('ReplyRepository postgres', () => {
     });
   });
 
-  describe('getRepliesByCommentId function', () => {
+  describe('getRepliesByCommentIds function', () => {
     it('should get comment replies correctly', async () => {
       // Arrange
       await RepliesTableTestHelper.addReply({});
       await RepliesTableTestHelper.addReply({
         id: 'reply-124',
+        commentId: 'comment-124',
         isDeleted: true,
       });
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       // Action
-      const replies = await replyRepositoryPostgres.getRepliesByCommentId(
-        'comment-123'
-      );
+      const replies = await replyRepositoryPostgres.getRepliesByCommentIds([
+        'comment-123',
+        'comment-124',
+      ]);
 
       // Assert
       expect(replies).toHaveLength(2);
